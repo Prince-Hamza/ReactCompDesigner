@@ -7,14 +7,15 @@ import Preview from './Preview'
 
 export default function Main() {
 
-  
+    const [mode, setMode] = useState('move')
+
 
     return (
         <div style={Styles.container}>
-            <Header  />
+            <Header setMode={setMode} />
             <div style={Styles.primaryRow} >
                 <Sidebar />
-                <Preview  />
+                <Preview mode={mode} setMode={setMode} />
             </div>
         </div>
 
@@ -27,7 +28,7 @@ const Styles = ({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        backgroundColor: 'lightgray',
+        backgroundColor: 'whitesmoke',
         width: '100%',
         height: '950px'
     },

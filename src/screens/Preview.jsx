@@ -7,63 +7,77 @@ import { compNames } from '../components/componentsArray'
 import { useEffect, useState } from 'react'
 import 'jquery-ui/ui/widgets/draggable'
 
-export default function Preview() {
+export default function Preview({ mode, setMode }) {
 
   const [allowResize, setAllowResize] = useState(false)
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
-  const [size, setSize] = useState({ width: '100%', height: '50px' })
-
+  const [location, setLocation] = useState({ top: 0, left: 0 })
+  const [size, setSize] = useState({ width: '100px', height: '50px' })
 
 
   const Components = [Button]
-  var selectedItem
 
-  const Movable = (e, id) => {
 
-    var y = e.clientY;
-    var x = e.clientX;
 
-    setCursorPosition({ top: y - 20 + 'px', left: x - 20 + 'px' });
 
-    // document.getElementById(id).style.top = y - 20 + 'px';
-    // document.getElementById(id).style.left = x - 20 + 'px';
+  const mouseDownHandler = (e) => { }
 
-  }
 
-  const select = (id) => {
-    // selectedItem = id
-    // Movable()
-    // alert(`selected item : ${id}`)
-  }
+  const getXYpos = (elm) => {
+    var x = elm.offsetLeft;
+    var y = elm.offsetTop;
 
-  const moveOrResize = (e, id) => {
-    if (allowResize) {
-      var element = document.getElementById(id)
-      console.log(`div Start: ${element.getBoundingClientRect().left} \n cursor left:${e.clientX}`)
-      //element.style.width = (e.clientX - element.getBoundingClientRect().left) + 'px'
-      //element.style.height = (e.clientY - element.getBoundingClientRect().top) + 'px'
+    elm = elm.offsetParent
 
-      setSize({
-        width: (e.clientX - element.getBoundingClientRect().left) + 'px',
-        height: (e.clientY - element.getBoundingClientRect().top) + 'px'
-      })
-
-    } else {
-      //setCursorPosition({ top: e.screenY, left: e.screenX });
-      Movable(e, id)
+    while (elm != null) {
+      x = parseInt(x) + parseInt(elm.offsetLeft)
+      y = parseInt(y) + parseInt(elm.offsetTop)
+      elm = elm.offsetParent;
     }
+
+    return { 'xp': x, 'yp': y }
   }
+
+  const getCoords = (e) => {
+    var xy_pos = getXYpos(e.target)
+    // e.pageX - elem.left
+    var x = e.pageX - xy_pos['xp']
+    var y = e.pageY - xy_pos['yp']
+
+    return { 'xp': x, 'yp': y }
+
+  }
+
+  const handleMouseMoveOnParent = (e) => {
+    var mouseXY = getCoords(e)
+    if (mode === 'move') setLocation({ top: mouseXY.yp + 8 + 'px', left: mouseXY.xp - 8 + 'px' })
+    if (mode === 'resize') setSize({ height: mouseXY.yp + 8 + 'px', width: mouseXY.xp - 8 + 'px' })
+  }
+
+  const onRightClick = (e) => {
+    e.preventDefault()
+    setMode(mode === 'move' ? 'resize' : mode === 'resize' ? 'free' : 'move')
+  }
+
+
 
   return (
     <div style={Styles.PreviewWrap}>
-      <div style={Styles.Preview} className={'DropItemsContainer'} >
-        {Components.map((Item, index) => {
+      <div
+        style={Styles.Preview}
+        onMouseMove={(e) => { handleMouseMoveOnParent(e) }}
+        onContextMenu={(e) => { onRightClick(e) }}
+      >
+        {Components.map((Item) => {
           return (
-            <Item key={Math.random()} moveOrResize={moveOrResize} cursorPosition={cursorPosition} size={size} />
+            <Item
+              key={Math.random()}
+              onMouseDown={mouseDownHandler}
+              location={location}
+              size={size}
+            />
           )
         })}
       </div>
-      <button onClick={() => { setAllowResize(allowResize ? false : true) }} > resize </button>
     </div>
   )
 }
@@ -74,15 +88,16 @@ const Styles = ({
     height: '100%',
     marginTop: '1%',
     marginLeft: '1%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'whitesmoke',
   },
   Preview: {
-    width: '25%',
-    height: '60%',
+    position: 'absolute',
+    top: '12%',
+    left: '45%',
+    width: '289px',
+    height: '599px',
     backgroundColor: 'white',
+    boxShadow:'0px 0px 4px 1px lightgray'
   },
   itemWrapper: {
     border: 'solid 1px'

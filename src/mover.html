@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Div following mouse cursor inside a parent</title>
+    <style>
+        #parent_div {
+            position: relative;
+            width: 80%;
+            height: 300px;
+            margin: 1em auto;
+            border: 1px solid #333;
+            background: #fefebe;
+        }
+
+        #div_moving {
+            position: absolute;
+            width: 140px;
+            height: 65px;
+            margin: 0;
+            border: 1px solid #33f;
+            background: #88ee99;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="parent_div">
+        <div id="div_moving">Moving Div ..</div>
+        Content in parent ...
+    </div>
+
+    <script>
+
+        var div_moving = document.getElementById('div_moving');
+        var parent_div = 'parent_div'
+
+        var movingDiv = {
+            mouseXY: {},
+            getXYpos: function (elm) {
+                x = elm.offsetLeft;
+                y = elm.offsetTop;
+
+                elm = elm.offsetParent
+                while (elm != null) {
+                    // my offset + my parent offset
+                    x = parseInt(x) + parseInt(elm.offsetLeft);
+                    y = parseInt(y) + parseInt(elm.offsetTop);
+                    elm = elm.offsetParent;
+                }
+                return { 'xp': x, 'yp': y };
+            },
+
+            getCoords: function (e) {
+                var xy_pos = this.getXYpos(e.target);
+
+                x = e.pageX
+                y = e.pageY
+
+                // e.pageX - elem.left
+                x = x - xy_pos['xp'];
+                y = y - xy_pos['yp'];
+
+                return { 'xp': x, 'yp': y };
+            }
+        }
+
+        
+        // registers 'mousemove' event to parent_div
+        document.getElementById(parent_div).addEventListener('mousemove', function (e) {
+            mouseXY = movingDiv.getCoords(e);
+            div_moving.style.left = mouseXY.xp + 8 + 'px';
+            div_moving.style.top = mouseXY.yp - 8 + 'px';
+        })
+        
+
+    </script>
+
+</body>
+
+</html>
