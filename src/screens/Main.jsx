@@ -1,12 +1,12 @@
 import React from 'react'
 import { useState } from 'react'
-
 import Header from './Header'
 import Sidebar from './Sidebar'
 import Preview from './Preview'
 
 export default function Main() {
 
+    const [components, setComponents] = useState([])
     const [mode, setMode] = useState('move')
 
 
@@ -14,8 +14,8 @@ export default function Main() {
         <div style={Styles.container}>
             <Header setMode={setMode} />
             <div style={Styles.primaryRow} >
-                <Sidebar />
-                <Preview mode={mode} setMode={setMode} />
+                <Sidebar components={components} setComponents={setComponents} />
+                <Preview components={components} mode={mode} setMode={setMode} />
             </div>
         </div>
 

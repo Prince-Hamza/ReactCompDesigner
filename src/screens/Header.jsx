@@ -13,7 +13,7 @@ const Styles = ({
     Header: {
         width: '100%',
         height: '30px',
-        backgroundColor: 'white',
+        backgroundColor: 'rgb(79,80,80)',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -21,7 +21,7 @@ const Styles = ({
     },
     Item: {
         marginRight: '18px',
-        cursor:'pointer'
+        cursor: 'pointer'
     }
 })
 

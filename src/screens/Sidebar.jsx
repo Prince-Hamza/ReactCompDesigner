@@ -1,14 +1,22 @@
 import React from 'react'
+import Button from '../components/Button'
+import TextInput from '../components/TextInput'
 import { compNames } from '../components/componentsArray'
 
-export default function Sidebar() {
+export default function Sidebar({ components, setComponents }) {
+  const componentFullList = [Button, TextInput]
 
+  const addItem = (index) => {
+    components.push(componentFullList[index])
+    setComponents([...components])
+  }
 
   return (
     <div style={Styles.Sidebar}>
-      {compNames.map((item) => {
+      <br />
+      {compNames.map((item, index) => {
         return (
-          <div key={Math.random()} >
+          <div key={Math.random()} style={Styles.itemWrap} onClick={() => { addItem(index) }}>
             <p style={Styles.Item} > {item} </p>
           </div>
         )
@@ -24,7 +32,17 @@ const Styles = ({
     height: '100%',
     backgroundColor: 'white'
   },
+  itemWrap: {
+    width: '100%',
+    height: '45px',
+    boxShadow: '0px 0px 8px 1px whitesmoke',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    marginBottom: '5px'
+  },
   Item: {
-    cursor: 'pointer'
+    font: 'italic 15px times new roman'
   }
 })

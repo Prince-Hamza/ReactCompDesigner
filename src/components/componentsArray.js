@@ -1,1 +1,1 @@
-export const compNames = ['Button']
+export const compNames = ['Button', 'Text Input']

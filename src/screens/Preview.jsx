@@ -1,26 +1,16 @@
 import React from 'react'
-import Button from '../components/Button'
-import $ from 'jquery'
+
 import 'jquery-ui/ui/widgets/draggable'
-import { Resizable } from '../components/GUI'
-import { compNames } from '../components/componentsArray'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import 'jquery-ui/ui/widgets/draggable'
 
-export default function Preview({ mode, setMode }) {
+export default function Preview({ components, mode, setMode }) {
 
-  const [allowResize, setAllowResize] = useState(false)
   const [location, setLocation] = useState({ top: 0, left: 0 })
   const [size, setSize] = useState({ width: '100px', height: '50px' })
-
-
-  const Components = [Button]
-
-
-
-
-  const mouseDownHandler = (e) => { }
-
+  const [compInfo, setCompInfo] = useState([{ top: 0, left: 0, width: '100px', height: '50px' }, { top: 0, left: 0, width: '100px', height: '50px' }])
+  const [selectedItem, setSelectedItem] = useState(0)
+  //const Components = [Button, TextInput]
 
   const getXYpos = (elm) => {
     var x = elm.offsetLeft;
@@ -49,13 +39,18 @@ export default function Preview({ mode, setMode }) {
 
   const handleMouseMoveOnParent = (e) => {
     var mouseXY = getCoords(e)
-    if (mode === 'move') setLocation({ top: mouseXY.yp + 8 + 'px', left: mouseXY.xp - 8 + 'px' })
-    if (mode === 'resize') setSize({ height: mouseXY.yp + 8 + 'px', width: mouseXY.xp - 8 + 'px' })
+    if (mode === 'move') { Object.assign(compInfo[selectedItem], { top: mouseXY.yp + 8 + 'px', left: mouseXY.xp - 8 + 'px' }) }
+    if (mode === 'resize') { Object.assign(compInfo[selectedItem], { height: mouseXY.yp + 8 + 'px', width: mouseXY.xp - 8 + 'px' }) }
+    setCompInfo([...compInfo])
   }
 
   const onRightClick = (e) => {
     e.preventDefault()
     setMode(mode === 'move' ? 'resize' : mode === 'resize' ? 'free' : 'move')
+  }
+
+  const onItemClick = (index) => {
+    setSelectedItem(index)
   }
 
 
@@ -67,14 +62,11 @@ export default function Preview({ mode, setMode }) {
         onMouseMove={(e) => { handleMouseMoveOnParent(e) }}
         onContextMenu={(e) => { onRightClick(e) }}
       >
-        {Components.map((Item) => {
+        {components.map((Item, index) => {
           return (
-            <Item
-              key={Math.random()}
-              onMouseDown={mouseDownHandler}
-              location={location}
-              size={size}
-            />
+            <Item key={Math.random()} onClick={onItemClick} info={compInfo[index]} index={index} >
+
+            </Item>
           )
         })}
       </div>
@@ -97,7 +89,7 @@ const Styles = ({
     width: '289px',
     height: '599px',
     backgroundColor: 'white',
-    boxShadow:'0px 0px 4px 1px lightgray'
+    boxShadow: '0px 0px 4px 1px lightgray'
   },
   itemWrapper: {
     border: 'solid 1px'

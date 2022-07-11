@@ -1,8 +1,11 @@
 import React from 'react'
 
-export default function Button({ location, size, onMouseDown }) {
+export default function Button({ info, onClick, index }) {
     return (
-        <div style={{ ...Styles.Button, width: size.width, height: size.height, top: location.top, left: location.left }}        >
+        <div
+            style={{ ...Styles.Button, width: info.width, height: info.height, top: info.top, left: info.left }}
+            onClick={() => { onClick(index) }}
+        >
             <p>  Button </p>
         </div>
     )
