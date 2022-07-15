@@ -1,26 +1,32 @@
 import React from 'react'
-import { useState } from 'react'
 import Header from './Header'
 import Sidebar from './Sidebar'
 import Preview from './Preview'
+import { useState } from 'react'
 
 export default function Main() {
-
     const [components, setComponents] = useState([])
-    const [mode, setMode] = useState('move')
-
+    const [mode, setMode] = useState('free')
 
     return (
         <div style={Styles.container}>
             <Header setMode={setMode} />
             <div style={Styles.primaryRow} >
-                <Sidebar components={components} setComponents={setComponents} />
-                <Preview components={components} mode={mode} setMode={setMode} />
+                <Sidebar
+                    components={components}
+                    setComponents={setComponents}
+                />
+                <Preview
+                    components={components}
+                    mode={mode}
+                    setMode={setMode}
+                />
             </div>
         </div>
 
     )
 }
+
 
 const Styles = ({
     container: {
