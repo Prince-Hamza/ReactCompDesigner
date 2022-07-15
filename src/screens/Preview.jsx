@@ -28,7 +28,9 @@ export default function Preview({ components, mode, setMode }) {
 
   return (
     <div style={Styles.PreviewWrap}>
-      {selectedItem > -1 && components[selectedItem].name.includes('Layout') && <ItemOptions compInfo={compInfo} setCompInfo={setCompInfo} selectedItem={compInfo[selectedItem]} />}
+
+      {selectedItem > -1 && components[selectedItem].name.includes('Layout') && <ItemOptions compInfo={compInfo} setCompInfo={setCompInfo} selectedItem={selectedItem} />}
+
       <div style={Styles.Preview} onMouseMove={(e) => { handleMouseMoveOnParent(e) }} onContextMenu={(e) => { onRightClick(e) }} >
         {compInfo.map((Item, index) => {
           return (
