@@ -1,19 +1,24 @@
 import React from 'react'
+import { useState } from 'react'
 
 export default function ItemOptions({ compInfo, setCompInfo, selectedItem }) {
 
     const contentStyles = ['top right', 'top middle', 'top left', 'centrify', 'centre left', 'centre right', 'bottom right', 'bottom middle', 'bottom left']
+    const [flex, setFlex] = useState({ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' })
+
 
     const inLayout = (item) => {
-        var layout = compInfo[selectedItem]
-        item.inLayout = layout.key
-        layout.children = []
-        layout.children.push(item)
+        item.inLayout = compInfo[selectedItem].key
+        alert(`layout: ${JSON.stringify(compInfo[selectedItem])}`)
+        alert(`before : ${JSON.stringify(compInfo[selectedItem])}`)
+        compInfo[selectedItem].children.push(item)
+        alert(`after : ${JSON.stringify(compInfo[selectedItem])}`)
+        setCompInfo([...compInfo])
     }
 
-    const flexStyle = (style) => {
+    const flexStyle = (style) => { }
 
-    }
+    const toggleDirection = () => { setFlex(flex.flexDirection === 'row' ? 'column' : 'row') }
 
     return (
         <div style={Styles.menu}>
@@ -32,17 +37,15 @@ export default function ItemOptions({ compInfo, setCompInfo, selectedItem }) {
                 )
             })}
 
-
             <h5> Direction </h5>
 
             <div style={Styles.row}>
-                <input type="radio" onChange={(e) => { }} />
+                <input checked={flex.flexDirection === 'row' ? true : false} type="radio" onChange={() => { toggleDirection() }} />
                 <p> row </p>
             </div>
 
-
             <div style={Styles.row}>
-                <input type="radio" onChange={(e) => { }} />
+                <input checked={flex.flexDirection === 'column' ? true : false} type="radio" onChange={() => { toggleDirection() }} />
                 <p> column </p>
             </div>
 
@@ -70,7 +73,7 @@ const Styles = ({
         width: '200px',
         height: '100%',
         backgroundColor: 'white',
-        overflow:'auto'
+        overflow: 'auto'
     },
     row: {
         display: 'flex',

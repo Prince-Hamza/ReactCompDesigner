@@ -7,23 +7,26 @@ import { useState } from 'react'
 export default function Main() {
     const [components, setComponents] = useState([])
     const [mode, setMode] = useState('free')
+    const [compLoad, setCompLoad] = useState(false)
 
     return (
         <div style={Styles.container}>
-            <Header setMode={setMode} />
+            <Header />
             <div style={Styles.primaryRow} >
                 <Sidebar
                     components={components}
                     setComponents={setComponents}
+                    setCompLoad={setCompLoad}
                 />
                 <Preview
                     components={components}
                     mode={mode}
                     setMode={setMode}
+                    compLoad={compLoad}
+                    setCompLoad={setCompLoad}
                 />
             </div>
         </div>
-
     )
 }
 

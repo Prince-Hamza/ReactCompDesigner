@@ -4,7 +4,7 @@ import TextInput from '../components/TextInput'
 import Layout from '../components/Layout'
 import { componentsJson } from '../components/componentsArray'
 
-export default function Sidebar({ components, setComponents }) {
+export default function Sidebar({ components, setComponents, setCompLoad }) {
 
   const componentFullList = [Layout, Button, TextInput]
   var compsJson = componentsJson.map((item, index) => {
@@ -16,6 +16,7 @@ export default function Sidebar({ components, setComponents }) {
   const addItem = (item, index) => {
     item.key = components.length + 1
     components.push(compsJson[index])
+    setCompLoad(true)
     setComponents([...components])
   }
 

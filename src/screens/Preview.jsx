@@ -4,13 +4,28 @@ import { useState, useEffect } from 'react'
 import 'jquery-ui/ui/widgets/draggable'
 import ItemOptions from './ItemOptions'
 import { getCoords } from '../components/GUI'
+import { onData } from './interact'
+import { codeGen } from '../backend/codeGenerator'
 
-export default function Preview({ components, mode, setMode }) {
+export default function Preview({ components, mode, setMode, compLoad, setCompLoad }) {
 
-  const [compInfo, setCompInfo] = useState(components)
+  const [compInfo, setCompInfo] = useState([])
   const [selectedItem, setSelectedItem] = useState(-1)
 
-  useEffect(() => { setCompInfo([...components]) }, [components])
+  useEffect(() => {
+    const fn = () => {
+      const cg = new codeGen()
+      cg.generateCode(compInfo)
+    }
+
+    onData(fn)
+
+    console.log(JSON.stringify(components))
+    if (compLoad) setCompInfo([...components])
+    if (compLoad) setCompLoad(false)
+    console.log(`ci : ${JSON.stringify(compInfo)}`)
+
+  }, [compInfo, components, compLoad, setCompLoad])
 
   const handleMouseMoveOnParent = (e) => {
     var mouseXY = getCoords(e)
